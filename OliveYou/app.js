@@ -5,27 +5,49 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+// var index = require('./routes/index');
+// var users = require('./routes/users');
+// var signup = require('./routes/signup');
 
 var app = express();
 
 // view engine setup
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.engine('html',require('ejs').renderFile);
+app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
 
-app.use('/', index);
-app.use('/users', users);
+app.get('/',function(req,res){
+  res.render('index.html');
+});
 
+app.get('/signup',function(req,res){
+  res.render('signup.html');
+})
+app.get('/login',function(req,res){
+  res.render('login.html');
+})
+
+app.get('/profile',function(req,res){
+  res.render('profile.html');
+})
+
+app.get('/dashboard',function(req,res){
+  res.render('dashboard.html');
+})
+// app.use('/', index);
+// app.use('/users', users);
+// app.use('/signup', signup);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
